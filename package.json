@@ -1,0 +1,23 @@
+{
+  "name": "petsourceapi",
+  "version": "1.0.0",
+  "description": "PetSource API for the mobile apps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PetSourceio/petsourceapi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PetSourceio/petsourceapi/issues"
+  },
+  "homepage": "https://github.com/PetSourceio/petsourceapi#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "web3": "^1.0.0-beta.34"
+  }
+}
