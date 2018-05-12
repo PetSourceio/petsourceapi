@@ -14,4 +14,7 @@ module.exports = function(app) {
 
   app.route('/users/:userId/pets')
     .get(user.petList);
+
+  app.route('/users/:userId/wallet')
+    .get(user.wallet);
 };

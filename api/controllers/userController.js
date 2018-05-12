@@ -23,3 +23,10 @@ exports.petList = function(req, res) {
   console.log('userId: ' + id);
   res.status(200).json([{name: "pet1"}, {name: "pet2"}]);
 };
+
+exports.wallet = function(req, res) {
+  var id = req.params.id;
+  console.log('GET users/wallet');
+  console.log('userId: ' + id);
+  res.status(200).json({ethAddress: "0x70775E3d54557738392469Aa032148995e08d190", ethBalance: 0.01312, ptsBalance: 1.32321});
+};

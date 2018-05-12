@@ -74,7 +74,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Created user ID",
+            "description": "User ID",
             "schema": {
               "type": "integer"
             }
@@ -103,9 +103,38 @@
         ],
         "responses": {
           "200": {
-            "description": "Array of user owned pets",
+            "description": "Array of user owned pet objects",
             "schema": {
               "$ref": "#/definitions/ArrayOfPets"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/wallet": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Return users wallet",
+        "operationId": "userGetWallet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user for which to fetch wallet",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users wallet object",
+            "schema": {
+              "$ref": "#/definitions/Wallet"
             }
           }
         }
@@ -256,6 +285,20 @@
       "type": "array",
       "items": {
         "type": "object"
+      }
+    },
+    "Wallet": {
+      "type": "object",
+      "properties": {
+        "ethAddress": {
+          "type": "string"
+        },
+        "ethBalance": {
+          "type": "number"
+        },
+        "ptsBalance": {
+          "type": "number"
+        }
       }
     }
   }
