@@ -1,12 +1,12 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  UserModel = mongoose.model('User');
+  User = mongoose.model('User');
 
 exports.create = function(req, res) {
   console.log('POST users');
   console.log(req.body);
-  var newUser = new UserModel({
+  var newUser = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
@@ -17,7 +17,7 @@ exports.create = function(req, res) {
   newUser.save(function(err, createdUser) {
     if (err)
       res.send(err);
-      res.status(200).json(createdUser._id);
+    res.status(200).json(createdUser._id);
   });
   
 };
@@ -25,7 +25,18 @@ exports.create = function(req, res) {
 exports.login = function(req, res) {
   console.log('POST users/login');
   console.log(req.body);
-  res.status(200).json(1);
+  User.findOne({ email : req.body.email }, function(err, user) {
+    if (err)
+      res.send(err);
+
+    if (user.password != req.body.password)
+      res.status(403).send({
+        message: 'User password was incorrect.'
+      });  
+      
+    res.status(200).json(user._id);
+  });
+  
 };
 
 exports.info = function(req, res) {
