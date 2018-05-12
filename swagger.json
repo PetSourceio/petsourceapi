@@ -1,7 +1,6 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is the PetSource API",
     "version": "1.0.0",
     "title": "PetSource API"
   },
@@ -11,6 +10,10 @@
     {
       "name": "user",
       "description": "Operations about user"
+    },
+    {
+      "name": "pet",
+      "description": "Operations about pets"
     }
   ],
   "schemes": [
@@ -25,8 +28,7 @@
         "summary": "Create user",
         "operationId": "createUser",
         "produces": [
-          "application/json",
-          "application/xml"
+          "application/json"
         ],
         "parameters": [
           {
@@ -40,8 +42,11 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "200": {
+            "description": "Created user ID",
+            "schema": {
+              "type": "integer"
+            }
           }
         }
       }
@@ -73,11 +78,47 @@
           }
         }
       }
+    },
+    "/pets": {
+      "post": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Create pet",
+        "operationId": "createPet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created pet object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
     }
   },
   "definitions": {
     "User": {
       "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "phoneNumber",
+        "countryOfResidence",
+        "password"
+      ],
       "properties": {
         "firstName": {
           "type": "string"
@@ -112,8 +153,68 @@
           "type": "string"
         }
       },
+      "required": [
+        "email",
+        "password"
+      ],
       "xml": {
         "name": "UserLogin"
+      }
+    },
+    "Pet": {
+      "type": "object",
+      "required": [
+        "userID",
+        "name",
+        "sex",
+        "birthDate",
+        "species",
+        "breed",
+        "color"
+      ],
+      "properties": {
+        "userID": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sex": {
+          "type": "string"
+        },
+        "birthDate": {
+          "type": "string"
+        },
+        "species": {
+          "type": "string"
+        },
+        "breed": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "countryOfRegistration": {
+          "type": "string"
+        },
+        "stateOfRegistration": {
+          "type": "string"
+        },
+        "passportNumber": {
+          "type": "string"
+        },
+        "passportDateOfIssuance": {
+          "type": "string"
+        },
+        "passportIssuingAuthority": {
+          "type": "string"
+        },
+        "chipNumber": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Pet"
       }
     }
   }

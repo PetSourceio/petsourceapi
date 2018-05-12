@@ -7,8 +7,11 @@ var swaggerUi = require('swagger-ui-express'),
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var routes = require('./api/routes/userRoutes');
-routes(app);
+var userRoutes = require('./api/routes/userRoutes');
+userRoutes(app);
+var petRoutes = require('./api/routes/petRoutes');
+petRoutes(app);
+
 
 app.use('/', swaggerUi.serve);
 app.use('/', swaggerUi.setup(swaggerDocument));
