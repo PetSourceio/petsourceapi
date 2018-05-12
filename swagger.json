@@ -1,0 +1,305 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "PetSource API"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "user",
+      "description": "Operations about user"
+    },
+    {
+      "name": "pet",
+      "description": "Operations about pets"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create user",
+        "operationId": "createUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created user ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Log in",
+        "operationId": "userLogin",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/pets": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Return all users pets",
+        "operationId": "userGetPets",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user for which to fetch pets",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of user owned pet objects",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfPets"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/wallet": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Return users wallet",
+        "operationId": "userGetWallet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user for which to fetch wallet",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users wallet object",
+            "schema": {
+              "$ref": "#/definitions/Wallet"
+            }
+          }
+        }
+      }
+    },
+    "/pets": {
+      "post": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Create pet",
+        "operationId": "createPet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created pet object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Pet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created pet ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "phoneNumber",
+        "countryOfResidence",
+        "password"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "countryOfResidence": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ],
+      "xml": {
+        "name": "UserLogin"
+      }
+    },
+    "Pet": {
+      "type": "object",
+      "required": [
+        "userID",
+        "name",
+        "sex",
+        "birthDate",
+        "species",
+        "breed",
+        "color"
+      ],
+      "properties": {
+        "userID": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sex": {
+          "type": "string"
+        },
+        "birthDate": {
+          "type": "string"
+        },
+        "species": {
+          "type": "string"
+        },
+        "breed": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "countryOfRegistration": {
+          "type": "string"
+        },
+        "stateOfRegistration": {
+          "type": "string"
+        },
+        "passportNumber": {
+          "type": "string"
+        },
+        "passportDateOfIssuance": {
+          "type": "string"
+        },
+        "passportIssuingAuthority": {
+          "type": "string"
+        },
+        "chipNumber": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Pet"
+      }
+    },
+    "ArrayOfPets": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "Wallet": {
+      "type": "object",
+      "properties": {
+        "ethAddress": {
+          "type": "string"
+        },
+        "ethBalance": {
+          "type": "number"
+        },
+        "ptsBalance": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
