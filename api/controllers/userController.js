@@ -1,9 +1,25 @@
 'use strict';
 
+var mongoose = require('mongoose'),
+  UserModel = mongoose.model('User');
+
 exports.create = function(req, res) {
   console.log('POST users');
   console.log(req.body);
-  res.status(200).json(1);
+  var newUser = new UserModel({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phoneNumber: req.body.phoneNumber,
+    countryOfResidence: req.body.countryOfResidence,
+    password: req.body.password
+  });
+  newUser.save(function(err, createdUser) {
+    if (err)
+      res.send(err);
+      res.status(200).json(createdUser._id);
+  });
+  
 };
 
 exports.login = function(req, res) {
