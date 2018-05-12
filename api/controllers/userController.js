@@ -1,4 +1,7 @@
 'use strict';
+var jwt = require('jsonwebtoken');
+var bcrypt = require('bcryptjs');
+var config = require('../config');
 
 var mongoose = require('mongoose'),
   User = mongoose.model('User');
@@ -14,10 +17,16 @@ exports.create = function(req, res) {
     countryOfResidence: req.body.countryOfResidence,
     password: req.body.password
   });
-  newUser.save(function(err, createdUser) {
+  newUser.save(function(err, user) {
     if (err)
       res.send(err);
-    res.status(200).json(createdUser._id);
+
+    // create a token
+    var token = jwt.sign({ id: user._id }, config.secret, {
+      expiresIn: 1000*60*3 // expires in 3 minutes
+    });
+
+    res.status(200).send({auth: true, token: token, userId: user._id});
   });
   
 };
@@ -33,8 +42,13 @@ exports.login = function(req, res) {
       res.status(403).send({
         message: 'User password was incorrect.'
       });  
-      
-    res.status(200).json(user._id);
+
+    // create a token
+    var token = jwt.sign({ id: user._id }, config.secret, {
+      expiresIn: 1000*60*3 // expires in 3 minutes
+    });
+
+    res.status(200).send({auth: true, token: token, userId: user._id});
   });
   
 };
@@ -48,12 +62,32 @@ exports.petList = function(req, res) {
   var id = req.params.id;
   console.log('GET users/info');
   console.log('userId: ' + id);
-  res.status(200).json([{name: "pet1"}, {name: "pet2"}]);
+
+  var token = req.headers['x-access-token'];
+  if (!token) 
+    res.status(401).send({ auth: false, message: 'No token provided.' });
+
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    
+      res.status(200).json([{name: "pet1"}, {name: "pet2"}]);
+  });
 };
 
 exports.wallet = function(req, res) {
   var id = req.params.id;
   console.log('GET users/wallet');
   console.log('userId: ' + id);
-  res.status(200).json({ethAddress: "0x70775E3d54557738392469Aa032148995e08d190", ethBalance: 0.01312, ptsBalance: 1.32321});
+
+  var token = req.headers['x-access-token'];
+  if (!token) 
+    res.status(401).send({ auth: false, message: 'No token provided.' });
+
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err)
+      res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    
+      res.status(200).json({ethAddress: "0x70775E3d54557738392469Aa032148995e08d190", ethBalance: 0.01312, ptsBalance: 1.32321});
+  }); 
 };
