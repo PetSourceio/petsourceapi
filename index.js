@@ -1,6 +1,16 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+var swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
 
-app.get('/', (req, res) => res.send('Hello World! Welcome to the PetSource API'))
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+var routes = require('./api/routes/userRoutes');
+routes(app);
+
+app.use('/', swaggerUi.serve);
+app.use('/', swaggerUi.setup(swaggerDocument));
+
+app.listen(3000, () => console.log('Example app listening on port 3000!'));
