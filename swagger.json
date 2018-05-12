@@ -73,8 +73,40 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "200": {
+            "description": "Created user ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/pets": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Return all users pets",
+        "operationId": "userGetPets",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user for which to fetch pets",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of user owned pets",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfPets"
+            }
           }
         }
       }
@@ -101,8 +133,11 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "200": {
+            "description": "Created pet ID",
+            "schema": {
+              "type": "integer"
+            }
           }
         }
       }
@@ -215,6 +250,12 @@
       },
       "xml": {
         "name": "Pet"
+      }
+    },
+    "ArrayOfPets": {
+      "type": "array",
+      "items": {
+        "type": "object"
       }
     }
   }

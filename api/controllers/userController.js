@@ -16,3 +16,10 @@ exports.info = function(req, res) {
   console.log('GET users/info');
   res.status(200).json({email: "someName@email.com"});
 };
+
+exports.petList = function(req, res) {
+  var id = req.params.id;
+  console.log('GET users/info');
+  console.log('userId: ' + id);
+  res.status(200).json([{name: "pet1"}, {name: "pet2"}]);
+};

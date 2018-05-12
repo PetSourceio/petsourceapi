@@ -3,5 +3,5 @@
 exports.create = function(req, res) {
   console.log('POST pets');
   console.log(req.body);
-  res.json(200);
+  res.status(200).json(1);
 };

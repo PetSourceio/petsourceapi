@@ -11,4 +11,7 @@ module.exports = function(app) {
 
   app.route('/users/info')
     .get(user.info);
+
+  app.route('/users/:userId/pets')
+    .get(user.petList);
 };
