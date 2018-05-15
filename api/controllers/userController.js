@@ -18,8 +18,10 @@ exports.create = function(req, res) {
     password: req.body.password
   });
   newUser.save(function(err, user) {
-    if (err)
+    if (err){
       res.send(err);
+      return;
+    }
 
     // create a token
     var token = jwt.sign({ id: user._id }, config.secret, {
@@ -35,13 +37,17 @@ exports.login = function(req, res) {
   console.log('POST users/login');
   console.log(req.body);
   User.findOne({ email : req.body.email }, function(err, user) {
-    if (err)
+    if (err){
       res.send(err);
+      return;
+    }    
 
-    if (user.password != req.body.password)
+    if (user.password != req.body.password){
       res.status(403).send({
         message: 'User password was incorrect.'
       });  
+      return;
+    }     
 
     // create a token
     var token = jwt.sign({ id: user._id }, config.secret, {
@@ -59,35 +65,43 @@ exports.info = function(req, res) {
 };
 
 exports.petList = function(req, res) {
-  var id = req.params.id;
+  var id = req.params.userId;
   console.log('GET users/info');
   console.log('userId: ' + id);
 
   var token = req.headers['x-access-token'];
-  if (!token) 
+  if (!token) {
     res.status(401).send({ auth: false, message: 'No token provided.' });
+    return;  
+  }
 
   jwt.verify(token, config.secret, function(err, decoded) {
-    if (err)
+    if (err){
       res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+      return;
+    }
     
-      res.status(200).json([{name: "pet1"}, {name: "pet2"}]);
+    res.status(200).json([{name: "pet1"}, {name: "pet2"}]);
   });
 };
 
 exports.wallet = function(req, res) {
-  var id = req.params.id;
+  var id = req.params.userId;
   console.log('GET users/wallet');
   console.log('userId: ' + id);
 
   var token = req.headers['x-access-token'];
-  if (!token) 
+  if (!token) {
     res.status(401).send({ auth: false, message: 'No token provided.' });
+    return;
+  } 
 
   jwt.verify(token, config.secret, function(err, decoded) {
-    if (err)
+    if (err){
       res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+      return;
+    } 
     
-      res.status(200).json({ethAddress: "0x70775E3d54557738392469Aa032148995e08d190", ethBalance: 0.01312, ptsBalance: 1.32321});
+    res.status(200).json({ethAddress: "0x70775E3d54557738392469Aa032148995e08d190", ethBalance: 0.01312, ptsBalance: 1.32321});
   }); 
 };
