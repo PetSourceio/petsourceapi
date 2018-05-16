@@ -9,13 +9,14 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
   console.log('POST users');
   console.log(req.body);
+  var hashedPassword = bcrypt.hashSync(req.body.password, 8);
   var newUser = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
     countryOfResidence: req.body.countryOfResidence,
-    password: req.body.password
+    password: hashedPassword
   });
   newUser.save(function(err, user) {
     if (err){
@@ -42,7 +43,8 @@ exports.login = function(req, res) {
       return;
     }    
 
-    if (user.password != req.body.password){
+    var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+    if (!passwordIsValid){
       res.status(403).send({
         message: 'User password was incorrect.'
       });  
