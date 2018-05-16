@@ -108,7 +108,12 @@
               "$ref": "#/definitions/ArrayOfPets"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     },
     "/users/{userId}/wallet": {
@@ -137,7 +142,12 @@
               "$ref": "#/definitions/Wallet"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     },
     "/pets": {
@@ -170,6 +180,13 @@
           }
         }
       }
+    }
+  },
+  "securityDefinitions": {
+    "authentication": {
+      "type": "apiKey",
+      "name": "x-access-token",
+      "in": "header"
     }
   },
   "definitions": {
