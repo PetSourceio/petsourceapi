@@ -29,4 +29,11 @@ var UserSchema = new Schema({
     }
 });
 
+UserSchema.methods.toJSON = function() {
+    var object = this.toObject();
+    delete object.password;
+    delete object.__v;
+    return object;
+}
+
 module.exports = mongoose.model('User', UserSchema);

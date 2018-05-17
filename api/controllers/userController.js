@@ -4,7 +4,8 @@ var bcrypt = require('bcryptjs');
 var config = require('../config');
 
 var mongoose = require('mongoose'),
-  User = mongoose.model('User');
+  User = mongoose.model('User'),
+  ObjectId = mongoose.Types.ObjectId;
 
 exports.create = function(req, res) {
   console.log('POST users');
@@ -62,13 +63,46 @@ exports.login = function(req, res) {
 };
 
 exports.info = function(req, res) {
-  console.log('GET users/info');
-  res.status(200).json({email: "someName@email.com"});
+  var userId = req.params.userId;
+  console.log('GET users/:userId');
+  console.log('userId: ' + userId);
+
+  var token = req.headers['x-access-token'];
+  if (!token) {
+    res.status(401).send({ auth: false, message: 'No token provided.' });
+    return;  
+  }
+
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err){
+      res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+      return;
+    }
+    
+    User.findOne({ _id : new ObjectId(userId) }, function(err, user) {
+      if (err){
+        res.send(err);
+        return;
+      }    
+
+      if (user){
+        console.log('user found, returning');
+        console.log(user);
+        res.status(200).json(user.toJSON());
+        return;
+      }
+      else {
+        console.log('User not found');
+        res.status(404);
+        return;
+      }
+    });
+  });
 };
 
 exports.petList = function(req, res) {
   var id = req.params.userId;
-  console.log('GET users/info');
+  console.log('GET users/:userId/pets');
   console.log('userId: ' + id);
 
   var token = req.headers['x-access-token'];
@@ -89,7 +123,7 @@ exports.petList = function(req, res) {
 
 exports.wallet = function(req, res) {
   var id = req.params.userId;
-  console.log('GET users/wallet');
+  console.log('GET users/:userId/wallet');
   console.log('userId: ' + id);
 
   var token = req.headers['x-access-token'];

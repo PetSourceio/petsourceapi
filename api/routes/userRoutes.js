@@ -9,7 +9,7 @@ module.exports = function(app) {
   app.route('/users/login')
     .post(user.login);
 
-  app.route('/users/info')
+  app.route('/users/:userId')
     .get(user.info);
 
   app.route('/users/:userId/pets')
