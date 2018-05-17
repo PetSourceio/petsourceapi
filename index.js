@@ -8,7 +8,19 @@ var mongoose = require('mongoose');
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/PetSourceDB'); 
+var mongoUrl = "mongodb://localhost/PetSourceDB"
+var connectWithRetry = function() {
+    return mongoose.connect(mongoUrl, function(err) {
+        if (err) {
+            console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
+            setTimeout(connectWithRetry, 5000);
+        }
+        else {
+            console.log('Connected to MongoDB.');
+        }
+    });
+  };
+connectWithRetry();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
