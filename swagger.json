@@ -45,7 +45,7 @@
           "200": {
             "description": "Created user ID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         }
@@ -76,10 +76,44 @@
           "200": {
             "description": "User ID",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user info",
+        "operationId": "userGetInfo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User information",
+            "schema": {
+              "$ref": "#/definitions/UserView"
+            }
+          }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     },
     "/users/{userId}/pets": {
@@ -98,7 +132,7 @@
             "in": "path",
             "description": "ID of user for which to fetch pets",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -108,7 +142,12 @@
               "$ref": "#/definitions/ArrayOfPets"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     },
     "/users/{userId}/wallet": {
@@ -127,7 +166,7 @@
             "in": "path",
             "description": "ID of user for which to fetch wallet",
             "required": true,
-            "type": "integer"
+            "type": "string"
           }
         ],
         "responses": {
@@ -137,7 +176,12 @@
               "$ref": "#/definitions/Wallet"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     },
     "/pets": {
@@ -170,6 +214,13 @@
           }
         }
       }
+    }
+  },
+  "securityDefinitions": {
+    "authentication": {
+      "type": "apiKey",
+      "name": "x-access-token",
+      "in": "header"
     }
   },
   "definitions": {
@@ -225,6 +276,32 @@
         "name": "UserLogin"
       }
     },
+    "UserView": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "countryOfResidence": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
     "Pet": {
       "type": "object",
       "required": [
@@ -238,7 +315,7 @@
       ],
       "properties": {
         "userID": {
-          "type": "integer"
+          "type": "string"
         },
         "name": {
           "type": "string"
