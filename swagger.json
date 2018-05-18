@@ -4,7 +4,8 @@
     "version": "1.0.0",
     "title": "PetSource API"
   },
-  "host": "localhost:3000",
+  "host": "${process.env.HOST || 'localhost'}",
+  "port": "${process.env.PORT || '3000'}",
   "basePath": "/",
   "tags": [
     {
