@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
-var mongoUrl = "mongodb://localhost/PetSourceDB"
+var mongoUrl = process.env.PROD_MONGODB || "mongodb://localhost/PetSourceDB";
 var connectWithRetry = function() {
     return mongoose.connect(mongoUrl, function(err) {
         if (err) {
