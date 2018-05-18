@@ -17,4 +17,7 @@ module.exports = function(app) {
 
   app.route('/users/:userId/wallet')
     .get(user.wallet);
+
+  app.route('/users/:userId/wallet')
+      .post(user.newWallet);
 };
