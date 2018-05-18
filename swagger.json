@@ -5,7 +5,7 @@
     "title": "PetSource API"
   },
   // "host": "localhost:3000",
-  "host": "${process.env.HOST}",
+  "host": "petsourceapi.herokuapp.com",
   "basePath": "/",
   "tags": [
     {
