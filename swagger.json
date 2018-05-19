@@ -214,6 +214,35 @@
           }
         }
       }
+    },
+    "/pets/{petId}": {
+      "get": {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Get pet info",
+        "operationId": "petGetInfo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "petId",
+            "in": "path",
+            "description": "ID of Pet",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pet information",
+            "schema": {
+              "$ref": "#/definitions/PetView"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
@@ -356,6 +385,53 @@
       },
       "xml": {
         "name": "Pet"
+      }
+    },
+    "PetView": {
+      "type": "object",
+      "properties": {
+        "userID": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sex": {
+          "type": "string"
+        },
+        "birthDate": {
+          "type": "string"
+        },
+        "species": {
+          "type": "string"
+        },
+        "breed": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "countryOfRegistration": {
+          "type": "string"
+        },
+        "stateOfRegistration": {
+          "type": "string"
+        },
+        "passportNumber": {
+          "type": "string"
+        },
+        "passportDateOfIssuance": {
+          "type": "string"
+        },
+        "passportIssuingAuthority": {
+          "type": "string"
+        },
+        "chipNumber": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "PetView"
       }
     },
     "ArrayOfPets": {
