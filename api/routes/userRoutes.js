@@ -19,5 +19,5 @@ module.exports = function(app) {
     .get(user.wallet);
 
   app.route('/users/:userId/wallet')
-      .post(user.newWallet);
+    .post(user.newWallet);
 };

@@ -211,7 +211,12 @@
           }
         ],
         "responses": {
-          "200": {}
+          "200": {
+            "description": "Created wallet address",
+            "schema": {
+              "type": "string"
+            }
+          }
         },
         "security": [
           {

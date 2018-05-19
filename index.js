@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 var swaggerUi = require('swagger-ui-express'),
     swaggerDocument = require('./swagger.json');
 var User = require('./api/models/userModel');
+var Wallet = require('./api/models/walletModel');
 var mongoose = require('mongoose');
 
 // mongoose instance connection url connection
@@ -37,4 +38,8 @@ app.use(function (req, res, next) {
 app.use('/', swaggerUi.serve);
 app.use('/', swaggerUi.setup(swaggerDocument));
 
+<<<<<<< HEAD
 app.listen(process.env.PORT || 3000, () => console.log('Example app listening on port 3000!'));
+=======
+app.listen(3000, () => console.log('Example app listening on port 3000!'));
+>>>>>>> fix wallet creation problem

@@ -7,6 +7,7 @@ var ethereum = require('../services/ethereum');
 
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
+  Wallet = mongoose.model('Wallet'),
   ObjectId = mongoose.Types.ObjectId;
 
 exports.create = function(req, res) {

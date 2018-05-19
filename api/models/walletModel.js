@@ -6,7 +6,7 @@ var WalletSchema = new Schema({
     userId: {
       type: String,
       required: true
-    }
+    },
     walletString: {
         type: String,
         required: true
