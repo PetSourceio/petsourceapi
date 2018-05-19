@@ -1,8 +1,11 @@
 'use strict';
 
 module.exports = function(app) {
-  var pet = require('../controllers/petController');
+    var pet = require('../controllers/petController');
 
-  app.route('/pets')
-    .post(pet.create);
+    app.route('/pets')
+        .post(pet.create);
+
+    app.route('/pets/:petId')
+        .get(pet.info);
 };
