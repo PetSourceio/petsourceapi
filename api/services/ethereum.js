@@ -37,7 +37,10 @@ exports.getEthBalance = async (wallet) => {
 exports.pet = async (chipId) => {
   console.log('Getting pet info by chip id ' + chipId);
   var pet = await petsVault.pets.call(chipId);
-  return {name: pet[0], breed: pet[1], chipNumber: pet[2]};
+  var birthDate = new Date(pet[4]*1000);
+  var birthDateString =  [birthDate.getFullYear(), birthDate.getMonth() + 1, birthDate.getDate()].join('-');
+  return {name: pet[0], breed: pet[1], chipNumber: pet[2], sex: pet[3],
+  birthDate: birthDateString, species: pet[5], color: pet[6]};
 }
 
 exports.listPets = async (wallet) => {
@@ -55,11 +58,12 @@ exports.listPets = async (wallet) => {
 }
 
 exports.storePet = async (pet, accountKeystoreInfo, password) => {
-  console.log('Strogin pet: ' + pet)
+  console.log('Storing pet: ' + pet)
   var account = this.getWalletAddress(accountKeystoreInfo, password);
   web3.eth.defaultAccount = account;
   var nonce = await web3.eth.getTransactionCount(account);
-  var encodedData = petsVault.add.getData(pet.name, pet.breed, pet.chipNumber);
+  var encodedData = petsVault.add.getData(pet.name, pet.breed, pet.chipNumber,
+  pet.sex, new Date(pet.birthDate).getTime() / 1000, pet.species, pet.color);
   var userWallet = Wallet.fromV3(accountKeystoreInfo, password);
 
   var rawTx = {

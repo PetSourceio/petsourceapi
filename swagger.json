@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "title": "PetSource API"
   },
-  "host": "petsourceapi.herokuapp.com",
+  "host": "localhost:3000",
   "basePath": "/",
   "tags": [
     {
@@ -17,7 +17,7 @@
     }
   ],
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
     "/users": {
@@ -434,7 +434,9 @@
           "type": "string"
         },
         "birthDate": {
-          "type": "string"
+          "type": "string",
+          "example": "2018-09-07",
+          "format": "date"
         },
         "species": {
           "type": "string"
@@ -445,23 +447,8 @@
         "color": {
           "type": "string"
         },
-        "countryOfRegistration": {
-          "type": "string"
-        },
-        "stateOfRegistration": {
-          "type": "string"
-        },
-        "passportNumber": {
-          "type": "string"
-        },
-        "passportDateOfIssuance": {
-          "type": "string"
-        },
-        "passportIssuingAuthority": {
-          "type": "string"
-        },
         "chipNumber": {
-          "type": "string"
+          "type": "integer"
         }
       },
       "xml": {
@@ -478,7 +465,9 @@
           "type": "string"
         },
         "birthDate": {
-          "type": "string"
+          "type": "string",
+          "example": "2018-09-07",
+          "format": "date"
         },
         "species": {
           "type": "string"
@@ -487,21 +476,6 @@
           "type": "string"
         },
         "color": {
-          "type": "string"
-        },
-        "countryOfRegistration": {
-          "type": "string"
-        },
-        "stateOfRegistration": {
-          "type": "string"
-        },
-        "passportNumber": {
-          "type": "string"
-        },
-        "passportDateOfIssuance": {
-          "type": "string"
-        },
-        "passportIssuingAuthority": {
           "type": "string"
         },
         "chipNumber": {

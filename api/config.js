@@ -1,5 +1,5 @@
 // config.js
 module.exports = {
     'secret': 'supersecret',
-    'petsVaultAddress': '0x1102d789255594a51fd9c4f336badbd173313f5d'
+    'petsVaultAddress': '0x60541a7022b0e8cec823636774280475e5c02a1a'
   };
