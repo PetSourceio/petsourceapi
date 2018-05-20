@@ -23,12 +23,17 @@ exports.createWallet = (email, password) => {
     return wallet.toV3String(password);
 };
 
+<<<<<<< HEAD
 exports.getWalletAddress = (accountKeystoreInfo, password) => {
+=======
+exports.getWalletAddress = function(accountKeystoreInfo, password) {
+>>>>>>> Retrieve wallet info
     console.log('Getting wallet address');
     var wallet = Wallet.fromV3(accountKeystoreInfo, password);
     return '0x' + wallet.getAddress().toString('hex');
 };
 
+<<<<<<< HEAD
 exports.getEthBalance = async (wallet) => {
   console.log("Getting balance for " + wallet);
   return await web3.eth.getBalance(wallet);
@@ -91,3 +96,9 @@ exports.transactionStatus = async (txHash) => {
     return 'PENDING';
   }
 }
+=======
+exports.getEthBalance = async function(wallet) {
+  console.log("Getting balance for " + wallet);
+  return await web3.eth.getBalance(wallet);
+}
+>>>>>>> Retrieve wallet info

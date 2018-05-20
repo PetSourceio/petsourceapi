@@ -124,7 +124,7 @@ exports.petList = function(req, res) {
   });
 };
 
-exports.wallet = function(req, res) {
+exports.wallet = async function(req, res) {
   var id = req.params.userId;
   console.log('GET users/:userId/wallet');
   console.log('userId: ' + id);
@@ -140,8 +140,24 @@ exports.wallet = function(req, res) {
       res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
       return;
     }
+    console.log('Getting wallet for ' + id);
+    Wallet.findOne({ userId : id }, async function(err, walletInfo) {
+      if (err){
+        res.send(err);
+        return;
+      }
+      if (walletInfo){
+        var balance = await ethereum.getEthBalance(walletInfo.address);
+        res.status(200).json({ethAddress: walletInfo.address, ethBalance: balance, ptsBalance: 0});
+        return;
+      }
+      else {
+        console.log('Wallet not found');
+        res.status(404).send();
+        return;
+      }
+    });
 
-    res.status(200).json({ethAddress: "0x70775E3d54557738392469Aa032148995e08d190", ethBalance: 0.01312, ptsBalance: 1.32321});
   });
 };
 
@@ -163,11 +179,13 @@ exports.newWallet = function(req, res) {
     }
 
     var walletString = ethereum.createWallet(req.body.email, req.body.password);
+    var address = ethereum.getWalletAddress(walletString, req.body.password);
 
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
     var newWallet = new Wallet({
       userId: id,
       walletString: walletString,
+      address: address,
       email: req.body.email,
       password: hashedPassword
     });
@@ -177,7 +195,7 @@ exports.newWallet = function(req, res) {
         return;
       }
 
-      res.status(200).send(walletString);
+      res.status(200).send(address);
     });
   });
 };
