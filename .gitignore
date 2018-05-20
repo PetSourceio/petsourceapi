@@ -57,8 +57,4 @@ typings/
 # dotenv environment variables file
 .env
 
-# truffle contracts builds
-build/
-
-
 *.zip
