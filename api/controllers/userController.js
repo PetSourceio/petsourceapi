@@ -120,7 +120,22 @@ exports.petList = function(req, res) {
       return;
     }
 
-    res.status(200).json([{name: "pet1"}, {name: "pet2"}]);
+    Wallet.findOne({ userId : id }, async function(err, walletInfo) {
+      if (err){
+        res.send(err);
+        return;
+      }
+      if (walletInfo){
+        var pets = await ethereum.listPets(walletInfo.address);
+        res.status(200).json(pets);
+        return;
+      }
+      else {
+        console.log('Wallet not found');
+        res.status(404).send();
+        return;
+      }
+    });
   });
 };
 

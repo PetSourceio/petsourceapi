@@ -34,27 +34,32 @@ exports.getEthBalance = async (wallet) => {
   return await web3.eth.getBalance(wallet);
 }
 
-exports.pet = async (chipId, wallet) => {
-  return await petsVault.pets.call(chipId, {from: wallet})
+exports.pet = async (chipId) => {
+  console.log('Getting pet info by chip id ' + chipId);
+  var pet = await petsVault.pets.call(chipId);
+  return {name: pet[0], breed: pet[1], chipNumber: pet[2]};
 }
 
-exports.listPet = async (wallet) => {
+exports.listPets = async (wallet) => {
+  console.log('Getting pets for ' + wallet);
   var no = await petsVault.noPets.call({from: wallet});
+  console.log(wallet + ' has ' + no + ' pets. Getting pets info...');
   var infos = [];
   for (var i = 0; i < no; i++) {
     var id = await petsVault.ownership.call(wallet, i,{from: wallet});
-    var info = pet(id, wallet);
+    var info = await this.pet(id);
+    console.log(info);
     infos.push(info);
   }
   return infos;
 }
 
-exports.storePet = async (accountKeystoreInfo, password) => {
-  var account = getWalletAddress(accountKeystoreInfo, password);
+exports.storePet = async (pet, accountKeystoreInfo, password) => {
+  console.log('Strogin pet: ' + pet)
+  var account = this.getWalletAddress(accountKeystoreInfo, password);
   web3.eth.defaultAccount = account;
   var nonce = await web3.eth.getTransactionCount(account);
-  // newer version user encodeAbi
-  var encodedData = petsVault.add.getData(name, breed, chipId);
+  var encodedData = petsVault.add.getData(pet.name, pet.breed, pet.chipNumber);
   var userWallet = Wallet.fromV3(accountKeystoreInfo, password);
 
   var rawTx = {
@@ -62,21 +67,15 @@ exports.storePet = async (accountKeystoreInfo, password) => {
     nonce: web3.toHex(nonce),
     gasPrice: web3.toHex('50000000'),
     gasLimit: web3.toHex('500000'),
-    to: contractAddress,
+    to: config.petsVaultAddress,
     data: encodedData,
   }
   var tx = new Tx(rawTx);
   tx.sign(userWallet.getPrivateKey());
   var serializedTx = tx.serialize();
-  console.log('0x' + serializedTx.toString('hex'));
-  await web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), (error, txHash) => {
-      if(error) {
-        console.log("Failed to send transaction to contract" + error);
-        return;
-      }
-
-      console.log(txHash);
-  });
+  var txHash = await web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'));
+  console.log('Transaction sent to network: ' + txHash);
+  return txHash;
 }
 
 exports.transactionStatus = async (txHash) => {

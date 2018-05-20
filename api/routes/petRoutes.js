@@ -6,6 +6,9 @@ module.exports = function(app) {
     app.route('/pets')
         .post(pet.create);
 
+    app.route('/pets/:txId/status')
+        .get(pet.creationStatus);
+
     app.route('/pets/:petId')
         .get(pet.info);
 };
