@@ -182,6 +182,47 @@
             "authentication": []
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create users wallet",
+        "operationId": "userCreateWallet",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user for which to fetch wallet",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Create user wallet with params",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created wallet address",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     },
     "/pets": {
@@ -207,9 +248,43 @@
         ],
         "responses": {
           "200": {
-            "description": "Created pet ID",
+            "description": "Pet creation TX",
             "schema": {
-              "type": "integer"
+              "type": "string"
+            }
+          }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
+      }
+    },
+    "/pets/{txId}/status": {
+      "get" : {
+        "tags": [
+          "pet"
+        ],
+        "summary": "Get pet store transaction statuts",
+        "operationId": "petGetTransactionStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "txId",
+            "in": "path",
+            "description": "ID of Pet",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tx status",
+            "schema": {
+              "type": "string"
             }
           }
         }
@@ -241,7 +316,12 @@
               "$ref": "#/definitions/PetView"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     }
   },
@@ -335,15 +415,16 @@
       "type": "object",
       "required": [
         "userID",
+        "password",
         "name",
-        "sex",
-        "birthDate",
-        "species",
         "breed",
-        "color"
+        "chipId"
       ],
       "properties": {
         "userID": {
+          "type": "string"
+        },
+        "password": {
           "type": "string"
         },
         "name": {
@@ -353,7 +434,9 @@
           "type": "string"
         },
         "birthDate": {
-          "type": "string"
+          "type": "string",
+          "example": "2018-09-07",
+          "format": "date"
         },
         "species": {
           "type": "string"
@@ -364,23 +447,8 @@
         "color": {
           "type": "string"
         },
-        "countryOfRegistration": {
-          "type": "string"
-        },
-        "stateOfRegistration": {
-          "type": "string"
-        },
-        "passportNumber": {
-          "type": "string"
-        },
-        "passportDateOfIssuance": {
-          "type": "string"
-        },
-        "passportIssuingAuthority": {
-          "type": "string"
-        },
         "chipNumber": {
-          "type": "string"
+          "type": "integer"
         }
       },
       "xml": {
@@ -390,9 +458,6 @@
     "PetView": {
       "type": "object",
       "properties": {
-        "userID": {
-          "type": "string"
-        },
         "name": {
           "type": "string"
         },
@@ -400,7 +465,9 @@
           "type": "string"
         },
         "birthDate": {
-          "type": "string"
+          "type": "string",
+          "example": "2018-09-07",
+          "format": "date"
         },
         "species": {
           "type": "string"
@@ -409,21 +476,6 @@
           "type": "string"
         },
         "color": {
-          "type": "string"
-        },
-        "countryOfRegistration": {
-          "type": "string"
-        },
-        "stateOfRegistration": {
-          "type": "string"
-        },
-        "passportNumber": {
-          "type": "string"
-        },
-        "passportDateOfIssuance": {
-          "type": "string"
-        },
-        "passportIssuingAuthority": {
           "type": "string"
         },
         "chipNumber": {

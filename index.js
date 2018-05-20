@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 var swaggerUi = require('swagger-ui-express'),
     swaggerDocument = require('./swagger.json');
 var User = require('./api/models/userModel');
+var Wallet = require('./api/models/walletModel');
 var mongoose = require('mongoose');
 
 // mongoose instance connection url connection
@@ -30,9 +31,9 @@ userRoutes(app);
 var petRoutes = require('./api/routes/petRoutes');
 petRoutes(app);
 
-app.use(function (req, res, next) {
+/*app.use(function (req, res, next) {
     res.status(404).send("Sorry, can't find that!")
-});
+});*/
 
 app.use('/', swaggerUi.serve);
 app.use('/', swaggerUi.setup(swaggerDocument));
