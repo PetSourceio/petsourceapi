@@ -31,11 +31,11 @@ userRoutes(app);
 var petRoutes = require('./api/routes/petRoutes');
 petRoutes(app);
 
-/*app.use(function (req, res, next) {
-    res.status(404).send("Sorry, can't find that!")
-});*/
-
 app.use('/', swaggerUi.serve);
 app.use('/', swaggerUi.setup(swaggerDocument));
+
+app.use(function (req, res, next) {
+    res.status(404).send("Sorry, can't find that!")
+});
 
 app.listen(process.env.PORT || 3000, () => console.log('Example app listening on port 3000!'));
