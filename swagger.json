@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "title": "PetSource API"
   },
-  "host": "localhost:3000",
+  "host": "petsourceapi.herokuapp.com",
   "basePath": "/",
   "tags": [
     {
@@ -17,7 +17,7 @@
     }
   ],
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/users": {
