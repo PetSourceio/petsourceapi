@@ -6,6 +6,7 @@ var swaggerUi = require('swagger-ui-express'),
 var User = require('./api/models/userModel');
 var Wallet = require('./api/models/walletModel');
 var mongoose = require('mongoose');
+const logger = require("./api/utils/logger.js");
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
@@ -23,6 +24,8 @@ var connectWithRetry = function() {
   };
 connectWithRetry();
 
+app.use("/logs", express.static(__dirname + '/logs/logs.log'));
+app.use("/expressLogs", express.static(__dirname + '/logs/express.log'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -39,3 +42,26 @@ app.use(function (req, res, next) {
 });
 
 app.listen(process.env.PORT || 3000, () => console.log('Example app listening on port 3000!'));
+
+//Exception handling:
+process.on("uncaughtException", function(err) {
+    console.error(
+      `${new Date().toUTCString()} uncaughtException: ${err.message} ${err.stack} process exit 1`
+    );
+    logger.error(
+      `19 uncaughtException: ${err.message} ${err.stack} process exit 1`
+    );
+    // process.exit(1)
+});
+
+process.on("unhandledRejection", function(err) {
+    console.error(
+        `${new Date().toUTCString()} unhandledRejection: ${err.message} ${err.stack} process exit 1`
+    );
+    logger.error(
+        `25 unhandledRejection: ${err.message} ${err.stack} process exit 1`
+    );
+    // process.exit(1)
+});
+
+app.use(logger.connectLogger());
