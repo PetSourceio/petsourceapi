@@ -1,9 +1,9 @@
 'use strict';
 
-var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
 var ethereum = require('../services/ethereum');
+var authentication = require('../services/authentication');
 
 var mongoose = require('mongoose'),
   Wallet = mongoose.model('Wallet'),
@@ -12,15 +12,9 @@ var mongoose = require('mongoose'),
 exports.create = async (req, res) => {
     console.log('POST pets');
 
-    var token = req.headers['x-access-token'];
-    if (!token) {
-      res.status(401).send({ auth: false, message: 'No token provided.' });
-      return;
-    }
-
-    jwt.verify(token, config.secret, async function(err, decoded) {
-      if (err){
-        res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    authentication.validateLogin(req.body.userID, req.headers['x-access-token'], {}, function(err, data) {
+      if (err) {
+        res.status(err.status).send({ auth: false, message: err.msg });
         return;
       }
       console.log('Getting wallet for ' + req.body.userID);
@@ -48,16 +42,27 @@ exports.create = async (req, res) => {
           return;
         }
       });
-
     });
 };
 
 exports.creationStatus = async (req, res) => {
   console.log('GET pets/:txId/status');
   console.log(req.params.txId);
-  var status = await ethereum.transactionStatus(req.params.txId);
-  console.log('Tx' + req.params.txId + ' status ' + status)
-  res.status(200).json(status);
+
+  if (!req.query.userId) {
+    res.status(400).send({ auth: false, message: "Please provide user id as query param userId" });
+    return;
+  }
+
+  authentication.validateLogin(req.query.userId, req.headers['x-access-token'], {}, async function(err, data) {
+    if (err) {
+      res.status(err.status).send({ auth: false, message: err.msg });
+      return;
+    }
+    var status = await ethereum.transactionStatus(req.params.txId);
+    console.log('Tx' + req.params.txId + ' status ' + status)
+    res.status(200).json(status);
+  });
 };
 
 exports.info = async (req, res) => {
@@ -65,15 +70,14 @@ exports.info = async (req, res) => {
   console.log('GET pets/:petId');
   console.log('petId: ' + id);
 
-  var token = req.headers['x-access-token'];
-  if (!token) {
-    res.status(401).send({ auth: false, message: 'No token provided.' });
+  if (!req.query.userId) {
+    res.status(400).send({ auth: false, message: "Please provide user id as query param userId" });
     return;
   }
 
-  jwt.verify(token, config.secret, async function(err, decoded) {
-    if (err){
-      res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+  authentication.validateLogin(req.query.userId, req.headers['x-access-token'], {}, async function(err, data) {
+    if (err) {
+      res.status(err.status).send({ auth: false, message: err.msg });
       return;
     }
     var info = await ethereum.pet(id);

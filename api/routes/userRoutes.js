@@ -6,9 +6,6 @@ module.exports = function(app) {
   app.route('/users')
     .post(user.create);
 
-  app.route('/users/login')
-    .post(user.login);
-
   app.route('/users/:userId')
     .get(user.info);
 
@@ -20,4 +17,7 @@ module.exports = function(app) {
 
   app.route('/users/:userId/wallet')
     .post(user.newWallet);
+
+  app.route('/user/exists')
+        .get(user.exists);
 };

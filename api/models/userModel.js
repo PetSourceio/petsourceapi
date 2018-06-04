@@ -23,9 +23,9 @@ var UserSchema = new Schema({
         type: String,
         required: true
     },
-    password: {
-        type: String,
-        required: true
+    authPlatform: {
+      type: String,
+      required: true
     }
 });
 

@@ -48,38 +48,49 @@
               "type": "string"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     },
-    "/users/login": {
-      "post": {
+    "/user/exists": {
+      "get": {
         "tags": [
           "user"
         ],
-        "summary": "Log in",
-        "operationId": "userLogin",
-        "produces": [
-          "application/json"
-        ],
+        "summary": "Check if user with email exists",
+        "operationId": "checkIfExists",
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "Created user object",
+            "name": "email",
+            "in": "query",
+            "description": "email of user",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserLogin"
-            }
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "User ID",
+            "description": "User exist",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "User does not exist",
             "schema": {
               "type": "string"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     },
     "/users/{userId}": {
@@ -278,6 +289,13 @@
             "description": "ID of Pet",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "ID of user logged in",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
@@ -287,7 +305,12 @@
               "type": "string"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
       }
     },
     "/pets/{petId}": {
@@ -305,6 +328,13 @@
             "name": "petId",
             "in": "path",
             "description": "ID of Pet",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "ID of user logged in",
             "required": true,
             "type": "string"
           }
@@ -341,7 +371,7 @@
         "email",
         "phoneNumber",
         "countryOfResidence",
-        "password"
+        "authPlatform"
       ],
       "properties": {
         "firstName": {
@@ -359,8 +389,9 @@
         "countryOfResidence": {
           "type": "string"
         },
-        "password": {
-          "type": "string"
+        "authPlatform": {
+          "type": "string",
+          "enum": ["FB", "GOOGLE", "CIVIC"]
         }
       },
       "xml": {
