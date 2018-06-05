@@ -61,17 +61,18 @@ exports.exists = function(req, res) {
       return;
     }
 
-    if (!user) {
-      return res.status(404);
-    } else {
-      console.log(user);
+    if (user) {
+      console.log('User exists');
       authentication.validateToken(user.authPlatform, email, token, {}, function(err, data) {
         if (err) {
-          res.status(200).send({ message: "User exits, but token auth failed! cause: " + err.msg});
+          res.status(200).send({ message: "User exits, but token validation failed! cause: " + err.msg});
           return;
         }
-        return res.status(200);
+        return res.status(200).send();
       });
+    } else {
+      console.log('User does not exist')
+      return res.status(404).send();
     }
   });
 };
