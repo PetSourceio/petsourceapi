@@ -22,26 +22,37 @@ exports.create = function(req, res) {
     }
 
     User.findOne({ email : req.body.email }, function(err, user) {
-      if (user) {
-        res.status(409).send({ auth: false, message: "User already exists" });
-        return;
-      }
 
-      var newUser = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
-        countryOfResidence: req.body.countryOfResidence,
-        authPlatform: req.body.authPlatform
-      });
-      newUser.save(function(err, user) {
-        if (err){
-          res.send(err);
-          return;
-        }
-        res.status(200).send({userId: user._id});
-      });
+      if (user) {
+        console.log('User already exists: ' + user.email);
+        user.firstName = req.body.firstName;
+        user.lastName = req.body.lastName;
+        user.phoneNumber = req.body.phoneNumber;
+        user.countryOfResidence = req.body.countryOfResidence;
+        user.save( function(err, user) {
+          if (err){
+            res.send(err);
+            return;
+          }
+          res.status(200).send({userId: user._id});
+        });
+      } else {
+        var newUser = new User({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          phoneNumber: req.body.phoneNumber,
+          countryOfResidence: req.body.countryOfResidence,
+          authPlatform: req.body.authPlatform
+        });
+        newUser.save(function(err, user) {
+          if (err){
+            res.send(err);
+            return;
+          }
+          res.status(200).send({userId: user._id});
+        });
+      }
     });
   });
 };
@@ -65,10 +76,10 @@ exports.exists = function(req, res) {
       console.log('User exists');
       authentication.validateToken(user.authPlatform, email, token, {}, function(err, data) {
         if (err) {
-          res.status(200).send({ message: "User exits, but token validation failed! cause: " + err.msg});
+          res.status(400).send({ message: "User exits, but token validation failed! cause: " + err.msg});
           return;
         }
-        return res.status(200).send();
+        return res.status(200).json(user.toJSON());
       });
     } else {
       console.log('User does not exist')

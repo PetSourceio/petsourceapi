@@ -76,7 +76,7 @@
           "200": {
             "description": "User exist",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/UserView"
             }
           },
           "404": {
