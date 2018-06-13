@@ -23,16 +23,8 @@ exports.create = async (req, res) => {
           res.send(err);
           return;
         }
-        if (walletInfo){
-          var passwordIsValid = bcrypt.compareSync(req.body.password, walletInfo.password);
-          if (!passwordIsValid){
-            res.status(403).send({
-              message: 'User password was incorrect.'
-            });
-            return;
-          }
-
-          var tx = await ethereum.storePet(req.body, walletInfo.walletString, req.body.password);
+        if (walletInfo) {
+          var tx = await ethereum.storePet(req.body, walletInfo.address);
           res.status(200).json(tx);
           return;
         }

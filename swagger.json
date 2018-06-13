@@ -446,16 +446,12 @@
       "type": "object",
       "required": [
         "userID",
-        "password",
         "name",
         "breed",
         "chipId"
       ],
       "properties": {
         "userID": {
-          "type": "string"
-        },
-        "password": {
           "type": "string"
         },
         "name": {

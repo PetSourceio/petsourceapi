@@ -57,14 +57,17 @@ exports.listPets = async (wallet) => {
   return infos;
 }
 
-exports.storePet = async (pet, accountKeystoreInfo, password) => {
+exports.storePet = async (pet, userWalletAddress) => {
   console.log('Storing pet: ' + pet)
-  var account = this.getWalletAddress(accountKeystoreInfo, password);
-  web3.eth.defaultAccount = account;
-  var nonce = await web3.eth.getTransactionCount(account);
+
   var encodedData = petsVault.add.getData(pet.name, pet.breed, pet.chipNumber,
-  pet.sex, new Date(pet.birthDate).getTime() / 1000, pet.species, pet.color);
-  var userWallet = Wallet.fromV3(accountKeystoreInfo, password);
+  pet.sex, new Date(pet.birthDate).getTime() / 1000, pet.species, pet.color, userWalletAddress);
+
+  var account = this.getWalletAddress(config.mainWalletInfo, config.mainWalletPsw);
+  var nonce = await web3.eth.getTransactionCount(account);
+  var userWallet = Wallet.fromV3(config.mainWalletInfo, config.mainWalletPsw);
+
+  web3.eth.defaultAccount = account;
 
   var rawTx = {
     from: account,
