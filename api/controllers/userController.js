@@ -184,24 +184,31 @@ exports.newWallet = function(req, res) {
       res.status(err.status).send({ auth: false, message: err.msg });
       return;
     }
-    var walletString = ethereum.createWallet(req.body.email, req.body.password);
-    var address = ethereum.getWalletAddress(walletString, req.body.password);
-
-    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-    var newWallet = new Wallet({
-      userId: id,
-      walletString: walletString,
-      address: address,
-      email: req.body.email,
-      password: hashedPassword
-    });
-    newWallet.save(function(err, user) {
+    User.findOne({ _id : new ObjectId(id) }, function(err, user) {
       if (err){
         res.send(err);
         return;
       }
+      var password = user._id + user.email;
+      var walletString = ethereum.createWallet(user.email, password);
+      var address = ethereum.getWalletAddress(walletString, password);
 
-      res.status(200).send(address);
+      var hashedPassword = bcrypt.hashSync(password, 8);
+      var newWallet = new Wallet({
+        userId: id,
+        walletString: walletString,
+        address: address,
+        email: user.email,
+        password: hashedPassword
+      });
+      newWallet.save(function(err, user) {
+        if (err){
+          res.status(500).send(err);
+          return;
+        }
+
+        res.status(200).send(address);
+      });
     });
   });
 };

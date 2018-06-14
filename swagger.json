@@ -210,15 +210,6 @@
             "description": "ID of user for which to fetch wallet",
             "required": true,
             "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "Create user wallet with params",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/UserLogin"
-            }
           }
         ],
         "responses": {
@@ -286,7 +277,7 @@
           {
             "name": "txId",
             "in": "path",
-            "description": "ID of Pet",
+            "description": "TX ID",
             "required": true,
             "type": "string"
           },
@@ -396,24 +387,6 @@
       },
       "xml": {
         "name": "User"
-      }
-    },
-    "UserLogin": {
-      "type": "object",
-      "properties": {
-        "email": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "email",
-        "password"
-      ],
-      "xml": {
-        "name": "UserLogin"
       }
     },
     "UserView": {
