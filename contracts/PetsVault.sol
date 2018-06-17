@@ -2,27 +2,29 @@ pragma solidity ^0.4.23;
 contract PetsVault {
 
   struct Pet {
-    uint256 guid;
+    string guid;
     string name;
     string breed;
     string chipId;
     string sex;
     uint256 birthDate;
-    string species;
     string imageUrl;
     address owner;
   }
 
-  event AddingPetStarted(uint256 _guid, address _owner);
-  event PetExistsCheckingOwnerShip(uint256 _guid, address _owner);
-  event AssigningNewPetToOwner(uint256 _guid, address _owner);
-  event CreatingOrUpdatingPetObject(uint256 _guid, address _owner);
-  event AssigningNewPetToPetVault(uint256 _guid, address _owner);
-  event AssigningChipIdList(uint256 _guid, string _chipId);
-  event ReturningPetSaved(uint256 _guid, address _owner);
+  event AddingPetStarted(string _guid, address _owner);
+  event PetExistsCheckingOwnerShip(string _guid, address _owner);
+  event AssigningNewPetToOwner(string _guid, address _owner);
+  event CreatingOrUpdatingPetObject(string _guid, address _owner);
+  event AssigningNewPetToPetVault(string _guid, address _owner);
+  event AssigningChipIdList(string _guid, string _chipId);
+  event ReturningPetSaved(string _guid, address _owner);
 
   // id => pet mapping
   mapping(uint256 => Pet) public pets;
+
+  // guids => id mapping
+  mapping(bytes32 => uint256) public guids;
 
   // chipId => id mapping
   mapping(bytes32 => uint256) public chips;
@@ -30,48 +32,64 @@ contract PetsVault {
   // owner => id mapping for owned pets
   mapping(address => uint256[]) public ownership;
 
+  uint256 public petCount = 0;
+
   constructor() public {
   }
 
   function add(
-    uint256 _guid,
+    string _guid,
     string _name,
     string _breed,
     string _chipId,
     string _sex,
     uint256 _birthDate,
-    string _species,
     string _imageUrl,
     address _owner) public {
 
     emit AddingPetStarted(_guid, _owner);
+    bytes32 _guidBytes = stringToBytes32(_guid);
 
-    require(_guid != 0);
+    uint256 _petId = petCount;
+
+    require(_guidBytes.length != 0);
     require(_owner != address(0));
 
-    if(pets[_guid].owner != address(0)) {
+    if(guids[_guidBytes] != 0) {
       emit PetExistsCheckingOwnerShip(_guid, _owner);
-      require(pets[_guid].owner == _owner);
+      _petId = guids[_guidBytes];
+      require(pets[_petId].owner == _owner);
     } else {
       emit AssigningNewPetToOwner(_guid, _owner);
-      ownership[_owner].push(_guid);
+      ownership[_owner].push(_petId);
+      petCount = petCount + 1;
     }
 
     emit CreatingOrUpdatingPetObject(_guid, _owner);
     Pet memory _pet = Pet(
-      _guid, _name, _breed, _chipId, _sex, _birthDate, _species,
+      _guid, _name, _breed, _chipId, _sex, _birthDate,
       _imageUrl, _owner);
 
     emit AssigningNewPetToPetVault(_guid, _owner);
-    pets[_guid] = _pet;
+    pets[_petId] = _pet;
+    guids[_guidBytes] = _petId;
+
 
     bytes32 _chipBytes = stringToBytes32(_chipId);
     if (_chipBytes.length != 0) {
       emit AssigningChipIdList(_guid, _chipId);
-      chips[_chipBytes] = _guid;
+      chips[_chipBytes] = _petId;
     }
 
     emit ReturningPetSaved(_guid, _owner);
+  }
+
+  function byGuid(string _guid) public view returns (uint256) {
+    bytes32 _guidBytes = stringToBytes32(_guid);
+    if (guids[_guidBytes] != 0) {
+      return guids[_guidBytes];
+    }
+    return 0;
   }
 
   function byChipId(string _chipId) public view returns (uint256) {
