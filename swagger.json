@@ -419,6 +419,7 @@
       "type": "object",
       "required": [
         "userID",
+        "guid",
         "name",
         "breed",
         "chipId"
@@ -427,6 +428,9 @@
         "userID": {
           "type": "string"
         },
+        "guid": {
+          "type": "integer"
+        },
         "name": {
           "type": "string"
         },
@@ -434,9 +438,7 @@
           "type": "string"
         },
         "birthDate": {
-          "type": "string",
-          "example": "2018-09-07",
-          "format": "date"
+          "type": "integer"
         },
         "species": {
           "type": "string"
@@ -448,7 +450,10 @@
           "type": "string"
         },
         "chipNumber": {
-          "type": "integer"
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
         }
       },
       "xml": {
@@ -458,6 +463,9 @@
     "PetView": {
       "type": "object",
       "properties": {
+        "guid": {
+          "type": "integer"
+        },
         "name": {
           "type": "string"
         },
@@ -465,9 +473,7 @@
           "type": "string"
         },
         "birthDate": {
-          "type": "string",
-          "example": "2018-09-07",
-          "format": "date"
+          "type": "integer"
         },
         "species": {
           "type": "string"
@@ -479,6 +485,9 @@
           "type": "string"
         },
         "chipNumber": {
+          "type": "string"
+        },
+        "imageUrl": {
           "type": "string"
         }
       },

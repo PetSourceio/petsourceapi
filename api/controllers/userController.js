@@ -17,7 +17,7 @@ exports.create = function(req, res) {
   var token = req.headers['x-access-token'];
   authentication.validateToken(req.body.authPlatform, req.body.email, token, {}, function(err, data) {
     if (err) {
-      res.status(err.status).send({ auth: false, message: err.msg });
+      res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
 
@@ -31,10 +31,10 @@ exports.create = function(req, res) {
         user.countryOfResidence = req.body.countryOfResidence;
         user.save( function(err, user) {
           if (err){
-            res.send(err);
+            res.status(500).json(err);
             return;
           }
-          res.status(200).send({userId: user._id});
+          res.status(200).json({userId: user._id});
         });
       } else {
         var newUser = new User({
@@ -47,10 +47,10 @@ exports.create = function(req, res) {
         });
         newUser.save(function(err, user) {
           if (err){
-            res.send(err);
+            res.status(500).json(err);
             return;
           }
-          res.status(200).send({userId: user._id});
+          res.status(200).json({userId: user._id});
         });
       }
     });
@@ -68,7 +68,7 @@ exports.exists = function(req, res) {
 
   User.findOne({ email : email }, function(err, user) {
     if (err){
-      res.send(err);
+      res.status(500).json(err);
       return;
     }
 
@@ -76,7 +76,7 @@ exports.exists = function(req, res) {
       console.log('User exists');
       authentication.validateToken(user.authPlatform, email, token, {}, function(err, data) {
         if (err) {
-          res.status(400).send({ message: "User exits, but token validation failed! cause: " + err.msg});
+          res.status(400).json({ message: "User exits, but token validation failed! cause: " + err.msg});
           return;
         }
         return res.status(200).json(user.toJSON());
@@ -97,13 +97,13 @@ exports.info = function(req, res) {
 
   User.findOne({ _id : new ObjectId(userId) }, function(err, user) {
     if (err){
-      res.send(err);
+      res.status(500).json(err);
       return;
     }
 
     authentication.validateUserLogin(user, token, {}, function(err, data) {
       if (err) {
-        res.status(err.status).send({ auth: false, message: err.msg });
+        res.status(err.status).json({ auth: false, message: err.msg });
         return;
       }
 
@@ -121,13 +121,13 @@ exports.petList = function(req, res) {
 
   authentication.validateLogin(id, req.headers['x-access-token'], {}, function(err, data) {
     if (err) {
-      res.status(err.status).send({ auth: false, message: err.msg });
+      res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
 
     Wallet.findOne({ userId : id }, async function(err, walletInfo) {
       if (err){
-        res.send(err);
+        res.status(500).json(err);
         return;
       }
       if (walletInfo){
@@ -151,13 +151,13 @@ exports.wallet = async function(req, res) {
 
   authentication.validateLogin(id, req.headers['x-access-token'], {}, function(err, data) {
     if (err) {
-      res.status(err.status).send({ auth: false, message: err.msg });
+      res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
     console.log('Getting wallet for ' + id);
     Wallet.findOne({ userId : id }, async function(err, walletInfo) {
       if (err){
-        res.send(err);
+        res.status(500).json(err);
         return;
       }
       if (walletInfo){
@@ -181,12 +181,12 @@ exports.newWallet = function(req, res) {
 
   authentication.validateLogin(id, req.headers['x-access-token'], {}, function(err, data) {
     if (err) {
-      res.status(err.status).send({ auth: false, message: err.msg });
+      res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
     User.findOne({ _id : new ObjectId(id) }, function(err, user) {
       if (err){
-        res.send(err);
+        res.status(500).json(err);
         return;
       }
       var password = user._id + user.email;
@@ -203,11 +203,11 @@ exports.newWallet = function(req, res) {
       });
       newWallet.save(function(err, user) {
         if (err){
-          res.status(500).send(err);
+          res.status(500).json(err);
           return;
         }
 
-        res.status(200).send(address);
+        res.status(200).json(address);
       });
     });
   });

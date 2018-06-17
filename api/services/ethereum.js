@@ -34,13 +34,17 @@ exports.getEthBalance = async (wallet) => {
   return await web3.eth.getBalance(wallet);
 }
 
-exports.pet = async (chipId) => {
-  console.log('Getting pet info by chip id ' + chipId);
-  var pet = await petsVault.pets.call(chipId);
-  var birthDate = new Date(pet[4]*1000);
-  var birthDateString =  [birthDate.getFullYear(), birthDate.getMonth() + 1, birthDate.getDate()].join('-');
-  return {name: pet[0], breed: pet[1], chipNumber: pet[2], sex: pet[3],
-  birthDate: birthDateString, species: pet[5], color: pet[6]};
+exports.pet = async (guid) => {
+  console.log('Getting pet info by chip id ' + guid);
+  var pet = await petsVault.pets.call(guid);
+  return {guid: pet[0], name: pet[1], breed: pet[2], chipNumber: pet[3], sex: pet[4],
+  birthDate: pet[5]*1000, species: pet[6], imageUrl: pet[7]};
+}
+
+exports.petByChipId = async (chipId) => {
+  console.log('Getting pet info by chip id ' + guid);
+  var petId = await petsVault.byChipId.call(guid);
+  return this.pet(petId);
 }
 
 exports.listPets = async (wallet) => {
@@ -60,8 +64,8 @@ exports.listPets = async (wallet) => {
 exports.storePet = async (pet, userWalletAddress) => {
   console.log('Storing pet: ' + pet)
 
-  var encodedData = petsVault.add.getData(pet.name, pet.breed, pet.chipNumber,
-  pet.sex, new Date(pet.birthDate).getTime() / 1000, pet.species, pet.color, userWalletAddress);
+  var encodedData = petsVault.add.getData(pet.guid, pet.name, pet.breed, pet.chipNumber,
+  pet.sex, new Date(pet.birthDate).getTime() / 1000, pet.species, pet.imageUrl, userWalletAddress);
 
   var account = this.getWalletAddress(config.mainWalletInfo, config.mainWalletPsw);
   var nonce = await web3.eth.getTransactionCount(account);
