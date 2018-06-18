@@ -429,7 +429,7 @@
           "type": "string"
         },
         "guid": {
-          "type": "integer"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -464,7 +464,7 @@
       "type": "object",
       "properties": {
         "guid": {
-          "type": "integer"
+          "type": "string"
         },
         "name": {
           "type": "string"

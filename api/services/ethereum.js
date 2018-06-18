@@ -70,9 +70,19 @@ exports.listPets = async (wallet) => {
 
 exports.storePet = async (pet, userWalletAddress) => {
   console.log('Storing pet: ' + pet)
+  if (!pet.guid) {
+    throw new Error('Guid is null!');
+  }
 
-  var encodedData = petsVault.add.getData(pet.guid, pet.name, pet.breed, pet.chipNumber,
-  pet.sex, new Date(pet.birthDate).getTime() / 1000, pet.imageUrl, userWalletAddress);
+  var petName = pet.name ? pet.name : '';
+  var petBreed = pet.breed ? pet.breed : '';
+  var petChipNumber = pet.chipNumber ? pet.chipNumber : '';
+  var petSex = pet.sex ? pet.sex : '';
+  var petBirthDate = pet.birthDate ? new Date(pet.birthDate).getTime() / 1000 : '';
+  var petImageUrl = pet.imageUrl ? pet.imageUrl : '';
+
+  var encodedData = petsVault.add.getData(pet.guid, petName, petBreed, petChipNumber,
+  petSex, petBirthDate, petImageUrl, userWalletAddress);
 
   var account = this.getWalletAddress(config.mainWalletInfo, config.mainWalletPsw);
   var nonce = await web3.eth.getTransactionCount(account);
