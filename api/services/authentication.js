@@ -1,5 +1,7 @@
 'use strict';
 var fbAuth = require('./fbAuth');
+var googleAuth = require('./googleAuth');
+
 
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
@@ -14,7 +16,7 @@ exports.validateToken = function(platform, email, token, args, callback) {
    if (platform == 'FB') {
      fbAuth.validateToken(email, token, args, callback);
    } else if (platform == 'GOOGLE') {
-     callback({status: 405, msg: 'Google not supported yet'});
+     googleAuth.validateToken(email, token, args, callback);
    } else if (platform == 'CIVIC') {
      callback({status: 405, msg: 'Civic not supported yet'});
    } else {
@@ -48,7 +50,7 @@ exports.validateLogin = function(userId, token, args, callback) {
     if (user.authPlatform == 'FB') {
       fbAuth.validateToken(user.email, token, args, callback);
     } else if (user.authPlatform == 'GOOGLE') {
-      callback({status: 405, msg: 'Google not supported yet'});
+      googleAuth.validateToken(user.email, token, args, callback);
     } else if (user.authPlatform == 'CIVIC') {
       callback({status: 405, msg: 'Civic not supported yet'});
     } else {
