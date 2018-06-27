@@ -344,6 +344,170 @@
           }
         ]
       }
+    },
+    "/search/{userId}/pet/chip/{chipId}": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Search pets by chipId",
+        "operationId": "search pets by chipId",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user for which to fetch wallet",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "chipId",
+            "in": "path",
+            "description": "Chip ID of Pet",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pets list",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfPets"
+            }
+          }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
+      }
+    },
+    "/search/{userId}/pet/breed/{breed}": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Search pets by breed",
+        "operationId": "search pets by breed",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user for which to fetch wallet",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "breed",
+            "in": "path",
+            "description": "Breed of Pet",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pets list",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfPets"
+            }
+          }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
+      }
+    },
+    "/search/{userId}/pet/type/{type}": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Search pets by type",
+        "operationId": "search pets by type",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user for which to fetch wallet",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Type of Pet",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pets list",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfPets"
+            }
+          }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
+      }
+    },
+    "/search/{userId}/pet/country/{country}": {
+      "get": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Search pets by country",
+        "operationId": "search pets by country",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user for which to fetch wallet",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "in": "path",
+            "description": "country of Pet",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pets list",
+            "schema": {
+              "$ref": "#/definitions/ArrayOfPets"
+            }
+          }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
+      }
     }
   },
   "securityDefinitions": {

@@ -40,10 +40,14 @@ exports.pet = async (guid) => {
   return this.petByNo(petNo);
 }
 
+exports.petCount = async () => {
+  console.log('Getting pet count');
+  var petCount = await petsVault.petCount.call();
+  return petCount;
+}
+
 exports.petByNo = async (petNo) => {
-  console.log('Getting pet details ' + petNo);
   var pet = await petsVault.pets.call(petNo);
-  console.log('Got pet' + pet);
   return {guid: pet[0], name: pet[1], breed: pet[2], chipNumber: pet[3], sex: pet[4],
   birthDate: pet[5]*1000, imageUrl: pet[6]};
 }

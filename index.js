@@ -33,6 +33,8 @@ var userRoutes = require('./api/routes/userRoutes');
 userRoutes(app);
 var petRoutes = require('./api/routes/petRoutes');
 petRoutes(app);
+var petSearchRoutes = require('./api/routes/petSearchRoutes');
+petSearchRoutes(app);
 
 app.use('/', swaggerUi.serve);
 app.use('/', swaggerUi.setup(swaggerDocument));
