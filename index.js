@@ -5,7 +5,7 @@ var swaggerUi = require('swagger-ui-express'),
     swaggerDocument = require('./swagger.json');
 var User = require('./api/models/userModel');
 var Wallet = require('./api/models/walletModel');
-var ContactRequest = require('./api/models/ContactRequestsModel');
+var ContactRequest = require('./api/models/contactRequestsModel');
 
 var mongoose = require('mongoose');
 const logger = require("./api/utils/logger.js");
