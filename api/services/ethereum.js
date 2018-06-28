@@ -52,6 +52,12 @@ exports.petByNo = async (petNo) => {
   birthDate: pet[5]*1000, imageUrl: pet[6]};
 }
 
+exports.petOwnerWallet = async (petGuid) => {
+  var petNo = await petsVault.byGuid.call(petGuid);
+  var pet = await petsVault.pets.call(petNo);
+  return pet[7];
+}
+
 exports.petByChipId = async (chipId) => {
   console.log('Getting pet info by chip id ' + guid);
   var petId = await petsVault.byChipId.call(guid);

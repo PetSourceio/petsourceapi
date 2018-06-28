@@ -103,7 +103,6 @@ exports.search = async (req, res) => {
       var pet = await ethereum.petByNo(i);
       if ((!chipId || pet.chipNumber == chipId) &&
           (!breed || pet.breed == breed)) {
-        pet.id = i;
         result.push(pet);
       }
     }

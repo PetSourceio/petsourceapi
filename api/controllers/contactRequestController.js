@@ -16,9 +16,31 @@ exports.request = async (req, res) => {
       res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
+    try {
+      var petOwnerWallet = await ethereum.petOwnerWallet(req.params.petId);
+      var wallet = await Wallet.findOne({ address : petOwnerWallet });
+      if (!wallet) {
+        res.status(409).json({ auth: false, message: 'User wallet not found' });
+        return;
+      }
 
-    res.status(501).json();
+      console.log(wallet);
+
+      var contactRequest = new ContactRequest({
+        requestBy: req.params.userId,
+        requestTo: wallet.userId,
+        requestToPetId: req.params.petId,
+        status: 'PENDING',
+        message: req.body.message
+      });
+      await contactRequest.save();
+      res.status(200).json();
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ auth: false, message: 'Error while executing contact request' });
+    }
   });
+}
 
 exports.received = async (req, res) => {
   console.log('GET /contact/{userId}/request/received');
@@ -27,9 +49,27 @@ exports.received = async (req, res) => {
       res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
-
-    res.status(501).json();
+    try {
+      var requests = await ContactRequest.find({requestTo : req.params.userId});
+      var results = [];
+      for (var i = 0; i < requests.length; i++) {
+        var request = requests[i];
+        var user = await User.findOne({ _id : new ObjectId(request.requestBy) });
+        var resultObj = {
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          countryOfResidence: user.countryOfResidence,
+          message: request.message
+        };
+        results.push(resultObj);
+      }
+      res.status(200).json(results);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ auth: false, message: 'Error while executing contact request' });
+    }
   });
+}
 
 exports.sent = async (req, res) => {
   console.log('GET /contact/{userId}/request/sent');
@@ -38,9 +78,42 @@ exports.sent = async (req, res) => {
       res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
+    try {
+      var requests = await ContactRequest.find({requestBy : req.params.userId});
+      var results = [];
+      for (var i = 0; i < requests.length; i++) {
+        var request = requests[i];
+        var resultObj = {
+          status: request.status,
+          message: request.message
+        };
+        var pet = await ethereum.pet(request.requestToPetId);
+        resultObj.pet = {
+          name : pet.name,
+          country : '',
+          breed: pet.breed,
+          type: ''
+        }
+        if (request.status == 'APROOVED') {
+          var user = await User.findOne({ _id : new ObjectId(request.requestTo) });
+          resultObj.user = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phoneNumber: user.phoneNumber,
+            countryOfResidence: user.countryOfResidence
+          }
+        }
+        results.push(resultObj);
+      }
 
-    res.status(501).json();
+      res.status(200).json(results);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ auth: false, message: 'Error while executing contact request' });
+    }
   });
+}
 
 exports.aproove = async (req, res) => {
   console.log('GET /contact/{userId}/request/{reqId}/aproove');
@@ -49,9 +122,9 @@ exports.aproove = async (req, res) => {
       res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
-
     res.status(501).json();
   });
+}
 
 exports.decline = async (req, res) => {
   console.log('GET /contact/{userId}/request/{reqId}/decline');
@@ -62,4 +135,5 @@ exports.decline = async (req, res) => {
     }
 
     res.status(501).json();
-});
+  });
+}
