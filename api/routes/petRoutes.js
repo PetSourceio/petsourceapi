@@ -11,4 +11,7 @@ module.exports = function(app) {
 
     app.route('/pets/:petId')
         .get(pet.info);
+
+    app.route('/pets/search')
+        .post(pet.search);
 };

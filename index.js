@@ -5,6 +5,8 @@ var swaggerUi = require('swagger-ui-express'),
     swaggerDocument = require('./swagger.json');
 var User = require('./api/models/userModel');
 var Wallet = require('./api/models/walletModel');
+var ContactRequest = require('./api/models/ContactRequestsModel');
+
 var mongoose = require('mongoose');
 const logger = require("./api/utils/logger.js");
 
@@ -33,8 +35,8 @@ var userRoutes = require('./api/routes/userRoutes');
 userRoutes(app);
 var petRoutes = require('./api/routes/petRoutes');
 petRoutes(app);
-var petSearchRoutes = require('./api/routes/petSearchRoutes');
-petSearchRoutes(app);
+/*var contactRequestRoutes = require('./api/routes/contactRequestRoutes');
+contactRequestRoutes(app);*/
 
 app.use('/', swaggerUi.serve);
 app.use('/', swaggerUi.setup(swaggerDocument));

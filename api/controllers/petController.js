@@ -81,3 +81,32 @@ exports.info = async (req, res) => {
     res.status(200).json(info);
   });
 };
+
+exports.search = async (req, res) => {
+  console.log('POST pets/search/chip/:chipId');
+  console.log(req.body);
+
+  authentication.validateLogin(req.body.userID, req.headers['x-access-token'], {}, async function(err, data) {
+    if (err) {
+      res.status(err.status).json({ auth: false, message: err.msg });
+      return;
+    }
+    var chipId = req.body.chipId;
+    var breed = req.body.breed;
+    var type = req.body.type;
+    var country = req.body.country;
+
+    var result = [];
+    var petCount = await ethereum.petCount();
+    console.log('Found pet count: ' + petCount);
+    for (var i = 0; i < petCount; i++) {
+      var pet = await ethereum.petByNo(i);
+      if ((!chipId || pet.chipNumber == chipId) &&
+          (!breed || pet.breed == breed)) {
+        pet.id = i;
+        result.push(pet);
+      }
+    }
+    res.status(200).json(result);
+  });
+};
