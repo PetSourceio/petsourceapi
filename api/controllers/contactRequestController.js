@@ -56,10 +56,12 @@ exports.received = async (req, res) => {
         var request = requests[i];
         var user = await User.findOne({ _id : new ObjectId(request.requestBy) });
         var resultObj = {
+          requestId: request._id,
           email: user.email,
           phoneNumber: user.phoneNumber,
           countryOfResidence: user.countryOfResidence,
-          message: request.message
+          message: request.message,
+          status: request.status
         };
         results.push(resultObj);
       }
@@ -84,6 +86,7 @@ exports.sent = async (req, res) => {
       for (var i = 0; i < requests.length; i++) {
         var request = requests[i];
         var resultObj = {
+          requestId: request._id,
           status: request.status,
           message: request.message
         };
@@ -122,7 +125,23 @@ exports.aproove = async (req, res) => {
       res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
-    res.status(501).json();
+    try {
+      var request = await ContactRequest.findOne({ _id : new ObjectId(req.params.reqId)});
+      if (!request) {
+        res.status(404).json({message: 'Request not found' });
+        return;
+      }
+      if (request.requestTo != req.params.userId) {
+        res.status(405).json({message: 'request does not belong to this user' });
+        return;
+      }
+      request.status = 'APROOVED';
+      await request.save();
+      res.status(200).json();
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ auth: false, message: 'Error while accepting request' });
+    }
   });
 }
 
@@ -133,7 +152,22 @@ exports.decline = async (req, res) => {
       res.status(err.status).json({ auth: false, message: err.msg });
       return;
     }
-
-    res.status(501).json();
+    try {
+      var request = await ContactRequest.findOne({ _id : new ObjectId(req.params.reqId)});
+      if (!request) {
+        res.status(404).json({message: 'Request not found' });
+        return;
+      }
+      if (request.requestTo != req.params.userId) {
+        res.status(405).json({message: 'request does not belong to this user' });
+        return;
+      }
+      request.status = 'DECLINED';
+      await request.save();
+      res.status(200).json();
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ auth: false, message: 'Error while declining request' });
+    }
   });
 }

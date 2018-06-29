@@ -428,6 +428,82 @@
         ]
       }
     },
+    "/contact/{userId}/request/{reqId}/aproove": {
+      "post": {
+        "tags": [
+          "contacts"
+        ],
+        "summary": "Aproove contact req",
+        "operationId": "aproove_contact_req",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "reqId",
+            "in": "path",
+            "description": "ID of req",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user logged in",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result"
+          }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
+      }
+    },
+    "/contact/{userId}/request/{reqId}/decline": {
+      "post": {
+        "tags": [
+          "contacts"
+        ],
+        "summary": "Decline contact req",
+        "operationId": "decline_contact_req",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "reqId",
+            "in": "path",
+            "description": "ID of req",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user logged in",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "result"
+          }
+        },
+        "security": [
+          {
+            "authentication": []
+          }
+        ]
+      }
+    },
     "/contact/{userId}/request/sent": {
       "get": {
         "tags": [
@@ -697,6 +773,9 @@
     "ReceivedContactRequest": {
       "type": "object",
       "properties": {
+        "requestId": {
+          "type": "string"
+        },
         "email": {
           "type": "string"
         },
@@ -708,12 +787,18 @@
         },
         "message": {
           "type": "string"
+        },
+        "status": {
+          "type": "string"
         }
       }
     },
     "SentContactRequest": {
       "type": "object",
       "properties": {
+        "requestId": {
+          "type": "string"
+        },
         "message": {
           "type": "string"
         },
