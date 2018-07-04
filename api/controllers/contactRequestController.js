@@ -57,12 +57,18 @@ exports.received = async (req, res) => {
         var user = await User.findOne({ _id : new ObjectId(request.requestBy) });
         var resultObj = {
           requestId: request._id,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-          countryOfResidence: user.countryOfResidence,
           message: request.message,
           status: request.status
         };
+        resultObj.user = {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          countryOfResidence: user.countryOfResidence
+        }
+        var pet = await ethereum.pet(request.requestToPetId);
+        resultObj.pet = pet;
         results.push(resultObj);
       }
       res.status(200).json(results);
@@ -91,12 +97,7 @@ exports.sent = async (req, res) => {
           message: request.message
         };
         var pet = await ethereum.pet(request.requestToPetId);
-        resultObj.pet = {
-          name : pet.name,
-          country : '',
-          breed: pet.breed,
-          type: ''
-        }
+        resultObj.pet = pet;
         if (request.status == 'APROOVED') {
           var user = await User.findOne({ _id : new ObjectId(request.requestTo) });
           resultObj.user = {
