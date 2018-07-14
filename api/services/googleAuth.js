@@ -1,9 +1,10 @@
 const config = require('../config');
 const GoogleSignIn = require('google-sign-in');
-const project = new GoogleSignIn.Project(config.googleClientId);
+const project = new GoogleSignIn.Project(config.googleClientId0, config.googleClientId1);
 
 exports.validateToken = function(email, token, args, callback) {
-  console.log(config.googleClientId);
+  console.log(config.googleClientId0);
+  console.log(config.googleClientId1);
   console.log(token);
   project.verifyToken(token).then((jsonData) => {
       if (jsonData.email != email) {
